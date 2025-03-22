@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 242, 215, 160), // Fundo bege claro
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -26,8 +27,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Image.asset(
                   'assets/logo.png',
-                  height: 200, 
-                  width: 200,  //arruma logo do app
+                  height: 200,
+                  width: 200,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => Icon(Icons.error, size: 100),
                 ),
@@ -42,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 12),
                 TextFormField(
                   controller: passwordController,
                   decoration: InputDecoration(labelText: 'Senha'),

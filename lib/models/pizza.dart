@@ -1,7 +1,7 @@
 class Pizza {
   String name;
   double price;
-  int quantity; // 🔹 Remova "final" para permitir alteração
+  int quantity;
   String size;
   String crust;
   String observation;

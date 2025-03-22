@@ -7,6 +7,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sobre o App'),
+        backgroundColor: Color.fromARGB(185, 232, 123, 90), // Cor suavizada da AppBar
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

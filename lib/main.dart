@@ -1,28 +1,38 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
+import 'screens/login_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode, // Só habilita no modo de desenvolvimento
+      builder: (context) => MyApp(), // Carrega o app dentro do DevicePreview
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      useInheritedMediaQuery: true, 
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       title: 'Fauget Pizzeria',
       theme: ThemeData(
-        primaryColor: Color(0xFFD93D04), // Vermelho principal
-        scaffoldBackgroundColor: Color(0xFFFAF0DC), // Fundo bege claro
+        primaryColor: Color(0xFFD93D04),
+        scaffoldBackgroundColor: Color(0xFFFAF0DC),
         appBarTheme: AppBarTheme(
-          backgroundColor: Color(0xFFD93D04), // Vermelho
-          foregroundColor: Colors.white, // Texto branco
+          backgroundColor: Color(0xFFD93D04),
+          foregroundColor: Colors.white,
           elevation: 0,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(0xFFD93D04), // Vermelho
-            foregroundColor: Colors.white, // Texto branco
+            backgroundColor: Color(0xFFD93D04),
+            foregroundColor: Colors.white,
             textStyle: TextStyle(fontWeight: FontWeight.bold),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -31,7 +41,7 @@ class MyApp extends StatelessWidget {
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            foregroundColor: Color(0xFFD93D04), // Vermelho
+            foregroundColor: Color(0xFFD93D04),
             textStyle: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -53,7 +63,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HomeScreen(),
+      home: LoginScreen(),
     );
   }
 }

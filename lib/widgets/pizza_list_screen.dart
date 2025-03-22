@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/pizza_details_screen.dart'; // Certifique-se de que este arquivo existe
+import '../screens/pizza_details_screen.dart';
 
 class PizzaListScreen extends StatelessWidget {
   final Function(String, double, int, String, String, String) addToCart;

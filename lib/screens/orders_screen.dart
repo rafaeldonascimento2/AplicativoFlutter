@@ -9,7 +9,10 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Pedidos")),
+      appBar: AppBar(
+        title: Text("Pedidos"),
+         backgroundColor: Color.fromARGB(185, 232, 123, 90), // Cor suavizada
+      ),
       body: orders.isEmpty
           ? Center(
               child: Text(
