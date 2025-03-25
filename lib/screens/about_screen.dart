@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
-
-class AboutScreen extends StatelessWidget {
+ 
+class AboutScreen extends StatelessWidget { // Tela de Sobre o App
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,21 +16,21 @@ class AboutScreen extends StatelessWidget {
             } else {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen()), // Redireciona para a tela Home
               );
             }
           },
         ),
       ),
-      body: Padding(
+      body: Padding( // Espaçamento interno
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Text('Pizzaria Flutter', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
-            Text('Aplicativo desenvolvido para facilitar pedidos de pizza.'),
+            Text('Aplicativo desenvolvido para facilitar pedidos de pizza.'), // Descrição do App
             SizedBox(height: 20),
-            Text('Desenvolvido por: [Seu Nome]'),
+            Text('Desenvolvido por: Rafael do Nascimento - 838776'), // Nome do desenvolvedor
           ],
         ),
       ),

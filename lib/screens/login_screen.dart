@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 242, 215, 160), // Fundo bege claro
+      backgroundColor: Color.fromARGB(255, 242, 215, 160), // Fundo bege claro da tela de login
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -27,18 +27,18 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Image.asset(
                   'assets/logo.png',
-                  height: 200,
-                  width: 200,
+                  height: 200, // Altura da imagem logo
+                  width: 200, // Largura da imagem logo
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) => Icon(Icons.error, size: 100),
+                  errorBuilder: (context, error, stackTrace) => Icon(Icons.error, size: 100), // Ícone de erro caso a imagem não seja carregada
                 ),
                 SizedBox(height: 20),
                 TextFormField(
                   controller: emailController,
-                  decoration: InputDecoration(labelText: 'E-mail'),
+                  decoration: InputDecoration(labelText: 'E-mail'), // Campo de texto para digitar o e-mail
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Digite um e-mail válido';
+                      return 'Digite um e-mail válido'; // Mensagem de erro caso o campo esteja vazio
                     }
                     return null;
                   },

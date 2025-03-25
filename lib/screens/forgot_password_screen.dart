@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart'; 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends StatefulWidget { 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState(); 
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {  
+  final _formKey = GlobalKey<FormState>();  
+  final TextEditingController emailController = TextEditingController(); 
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) { 
+    return Scaffold( 
       appBar: AppBar(
         title: Text('Recuperar Senha'),
         leading: IconButton(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget { // Tela de cadastro de usuário
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState(); // Cria o estado da tela de cadastro
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> { // Estado da tela de cadastro
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -14,20 +14,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // Constrói a tela de cadastro
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de Usuário'),
+        title: Text('Cadastro de Usuário'), // Título da tela de cadastro
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            if (Navigator.canPop(context)) {
+            if (Navigator.canPop(context)) { // Verifica se é possível voltar para a tela anterior
               Navigator.pop(context); 
             }
           },
         ),
       ),
-      body: Padding(
+      body: Padding( // Adiciona um preenchimento interno ao conteúdo da tela
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -36,30 +36,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 TextFormField(
                   controller: nameController,
-                  decoration: InputDecoration(labelText: 'Nome'),
+                  decoration: InputDecoration(labelText: 'Nome'), 
                   validator: (value) => value!.isEmpty ? 'Campo obrigatório' : null,
                 ),
-                TextFormField(
+                TextFormField( // Campo de texto para digitar o e-mail
                   controller: emailController,
                   decoration: InputDecoration(labelText: 'E-mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obrigatório';
+                    if (value == null || value.isEmpty) { // Verifica se o campo está vazio
+                      return 'Campo obrigatório'; // Mensagem de erro caso o campo esteja vazio
                     }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Digite um e-mail válido';
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) { // Verifica se o e-mail é válido
+                      return 'Digite um e-mail válido'; // Mensagem de erro caso o e-mail seja inválido
                     }
                     return null;
                   },
                 ),
-                TextFormField(
+                TextFormField(  // Campo de texto para digitar o telefone
                   controller: phoneController,
-                  decoration: InputDecoration(labelText: 'Telefone'),
-                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(labelText: 'Telefone'), 
+                  keyboardType: TextInputType.phone, // Define o teclado para digitar números de telefone
                   validator: (value) => value!.isEmpty ? 'Campo obrigatório' : null,
                 ),
-                TextFormField(
+                TextFormField( // Campo de texto para digitar a senha
                   controller: passwordController,
                   decoration: InputDecoration(labelText: 'Senha'),
                   obscureText: true,
@@ -81,12 +81,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Cadastro realizado com sucesso!')),
                       );
-                      if (Navigator.canPop(context)) {
+                      if (Navigator.canPop(context)) { 
                         Navigator.pop(context);
                       }
                     }
                   },
-                  child: Text('Cadastrar'),
+                  child: Text('Cadastrar'), // Botão para cadastrar o usuário
                 ),
               ],
             ),

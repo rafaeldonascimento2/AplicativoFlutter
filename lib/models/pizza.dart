@@ -1,4 +1,4 @@
-class Pizza {
+class Pizza { //tudo da pizza
   String name;
   double price;
   int quantity;
@@ -6,7 +6,7 @@ class Pizza {
   String crust;
   String observation;
 
-  Pizza({
+  Pizza({ 
     required this.name,
     required this.price,
     required this.quantity,
