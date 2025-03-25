@@ -21,8 +21,8 @@ class PizzaDetailsScreen extends StatefulWidget {
   _PizzaDetailsScreenState createState() => _PizzaDetailsScreenState();
 }
 
-class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
-  int quantity = 1;
+class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> { //detalhes do item
+  int quantity = 1; 
   String selectedSize = "Médio";
   String selectedCrust = "Sem borda";
   String observation = "";

@@ -11,7 +11,7 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Pedidos"),
-         backgroundColor: Color.fromARGB(185, 232, 123, 90), // Cor suavizada
+         backgroundColor: Color.fromARGB(185, 232, 123, 90), // Altera a cor do AppBar
       ),
       body: orders.isEmpty
           ? Center(

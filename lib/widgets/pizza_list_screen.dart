@@ -6,7 +6,7 @@ class PizzaListScreen extends StatelessWidget {
 
   PizzaListScreen({required this.addToCart});
 
-  final List<Map<String, dynamic>> pizzasSalgadas = [
+  final List<Map<String, dynamic>> pizzasSalgadas = [ //listas dos itens
     {
       "name": "Pizza Margherita",
       "price": 35.00,
