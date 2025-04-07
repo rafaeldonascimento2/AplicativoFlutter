@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart'; 
-class ForgotPasswordScreen extends StatefulWidget { 
+import 'login_screen.dart';
+
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState(); 
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {  
-  final _formKey = GlobalKey<FormState>();  
-  final TextEditingController emailController = TextEditingController(); 
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) { 
-    return Scaffold( 
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text('Recuperar Senha'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             if (Navigator.canPop(context)) {
-              Navigator.pop(context); 
+              Navigator.pop(context);
             } else {
               Navigator.pushReplacement(
                 context,
@@ -59,7 +62,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Instruções enviadas para ${emailController.text}')),
+                      SnackBar(
+                        content: Text(
+                          'Instruções enviadas para ${emailController.text}',
+                        ),
+                      ),
                     );
                     Navigator.pushReplacement(
                       context,

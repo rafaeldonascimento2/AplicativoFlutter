@@ -9,6 +9,8 @@ import '../models/order.dart';
 import '../models/pizza.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -33,7 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-  void addToCart(String name, double price, int quantity, String size, String crust, String observation) {
+  void addToCart(
+    String name,
+    double price,
+    int quantity,
+    String size,
+    String crust,
+    String observation,
+  ) {
     setState(() {
       bool exists = false;
 
@@ -46,14 +55,17 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       if (!exists) {
-        cart.add(Pizza(
-          name: name,
-          price: price,
-          quantity: quantity,
-          size: size,
-          crust: crust,
-          observation: observation.isNotEmpty ? observation : "Sem observação",
-        ));
+        cart.add(
+          Pizza(
+            name: name,
+            price: price,
+            quantity: quantity,
+            size: size,
+            crust: crust,
+            observation:
+                observation.isNotEmpty ? observation : "Sem observação",
+          ),
+        );
       }
     });
   }
@@ -61,11 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void finalizeOrder() {
     if (cart.isNotEmpty) {
       setState(() {
-        orders.insert(0, Order(
-          items: List.from(cart),
-          total: cart.fold(0.0, (sum, item) => sum + (item.price * item.quantity)),
-          date: DateTime.now().toString(),
-        ));
+        orders.insert(
+          0,
+          Order(
+            items: List.from(cart),
+            total: cart.fold(
+              0.0,
+              (sum, item) => sum + (item.price * item.quantity),
+            ),
+            date: DateTime.now().toString(),
+          ),
+        );
         cart.clear();
         _updatePages();
       });
@@ -99,9 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: PizzaSearchDelegate(addToCart: (name, price, quantity, size, crust) {
-                  addToCart(name, price, quantity, size, crust, "");
-                }),
+                delegate: PizzaSearchDelegate(
+                  addToCart: (name, price, quantity, size, crust) {
+                    addToCart(name, price, quantity, size, crust, "");
+                  },
+                ),
               );
             },
           ),
@@ -112,10 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () async {
                   await _navigateWithFade(
                     context,
-                    CartScreen(
-                      cartItems: cart,
-                      finalizeOrder: finalizeOrder,
-                    ),
+                    CartScreen(cartItems: cart, finalizeOrder: finalizeOrder),
                   );
                   setState(() {});
                 },
@@ -161,7 +178,10 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.local_pizza), label: 'Pizzas'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_pizza),
+            label: 'Pizzas',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Pedidos'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Sobre'),
         ],

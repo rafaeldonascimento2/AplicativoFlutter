@@ -4,44 +4,45 @@ import '../screens/pizza_details_screen.dart';
 class PizzaListScreen extends StatelessWidget {
   final Function(String, double, int, String, String, String) addToCart;
 
-  PizzaListScreen({required this.addToCart});
+  PizzaListScreen({super.key, required this.addToCart});
 
-  final List<Map<String, dynamic>> pizzasSalgadas = [ //listas dos itens
+  final List<Map<String, dynamic>> pizzasSalgadas = [
+    //listas dos itens
     {
       "name": "Pizza Margherita",
       "price": 35.00,
       "image": "assets/pizza_margherita.png",
-      "description": "Molho de tomate, mussarela e manjericão fresco."
+      "description": "Molho de tomate, mussarela e manjericão fresco.",
     },
     {
       "name": "Pizza Pepperoni",
       "price": 40.00,
       "image": "assets/pizza_pepperoni.png",
-      "description": "Pizza clássica de pepperoni com queijo derretido."
+      "description": "Pizza clássica de pepperoni com queijo derretido.",
     },
     {
       "name": "Pizza Quatro Queijos",
       "price": 42.00,
       "image": "assets/pizza_quatro_queijos.png",
-      "description": "Mussarela, parmesão, gorgonzola e provolone."
+      "description": "Mussarela, parmesão, gorgonzola e provolone.",
     },
     {
       "name": "Pizza Frango com Catupiry",
       "price": 38.00,
       "image": "assets/pizza_frango_catupiry.png",
-      "description": "Pizza de frango desfiado com catupiry."
+      "description": "Pizza de frango desfiado com catupiry.",
     },
     {
       "name": "Pizza Portuguesa",
       "price": 39.50,
       "image": "assets/pizza_portuguesa.png",
-      "description": "Presunto, ovos, cebola e azeitonas."
+      "description": "Presunto, ovos, cebola e azeitonas.",
     },
     {
       "name": "Pizza Calabresa",
       "price": 36.00,
       "image": "assets/pizza_calabresa.png",
-      "description": "Calabresa fatiada com cebola e orégano."
+      "description": "Calabresa fatiada com cebola e orégano.",
     },
   ];
 
@@ -50,19 +51,19 @@ class PizzaListScreen extends StatelessWidget {
       "name": "Pizza de Chocolate",
       "price": 30.00,
       "image": "assets/pizza_chocolate.png",
-      "description": "Chocolate derretido e morangos."
+      "description": "Chocolate derretido e morangos.",
     },
     {
       "name": "Pizza de Banana com Canela",
       "price": 28.00,
       "image": "assets/pizza_banana.png",
-      "description": "Banana caramelizada e canela."
+      "description": "Banana caramelizada e canela.",
     },
     {
       "name": "Pizza de Doce de Leite",
       "price": 32.00,
       "image": "assets/pizza_doce_leite.png",
-      "description": "Cobertura de doce de leite e coco ralado."
+      "description": "Cobertura de doce de leite e coco ralado.",
     },
   ];
 
@@ -71,19 +72,19 @@ class PizzaListScreen extends StatelessWidget {
       "name": "Refrigerante Coca-Cola",
       "price": 5.00,
       "image": "assets/coca.png",
-      "description": "Lata de 350ml."
+      "description": "Lata de 350ml.",
     },
     {
       "name": "Suco de Laranja Natural",
       "price": 7.00,
       "image": "assets/suco_laranja.png",
-      "description": "Suco de laranja puro e refrescante."
+      "description": "Suco de laranja puro e refrescante.",
     },
     {
       "name": "Água Mineral",
       "price": 3.00,
       "image": "assets/agua.png",
-      "description": "Garrafa de 500ml."
+      "description": "Garrafa de 500ml.",
     },
   ];
 
@@ -92,19 +93,19 @@ class PizzaListScreen extends StatelessWidget {
       "name": "Caipirinha de Limão",
       "price": 15.00,
       "image": "assets/caipirinha.png",
-      "description": "Cachaça, limão, açúcar e gelo."
+      "description": "Cachaça, limão, açúcar e gelo.",
     },
     {
       "name": "Negroni",
       "price": 18.00,
       "image": "assets/negroni.png",
-      "description": "Gin, vermute rosso e Campari."
+      "description": "Gin, vermute rosso e Campari.",
     },
     {
       "name": "Piña Colada",
       "price": 20.00,
       "image": "assets/pina_colada.png",
-      "description": "Rum, leite de coco e abacaxi."
+      "description": "Rum, leite de coco e abacaxi.",
     },
   ];
 
@@ -121,7 +122,11 @@ class PizzaListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Map<String, dynamic>> items) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Map<String, dynamic>> items,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,41 +138,48 @@ class PizzaListScreen extends StatelessWidget {
           ),
         ),
         Column(
-          children: items.map((item) {
-            return Card(
-              elevation: 2,
-              margin: EdgeInsets.symmetric(vertical: 5),
-              child: ListTile(
-                leading: item["image"] != null
-                    ? Image.asset(
-                        item["image"],
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(Icons.image_not_supported, size: 50),
-                      )
-                    : Icon(Icons.image_not_supported, size: 50),
-                title: Text(item["name"], style: TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PizzaDetailsScreen(
-                        name: item["name"],
-                        basePrice: item["price"],
-                        image: item["image"] ?? "",
-                        description: item["description"],
-                        isPizza: title.contains("Pizza"),
-                        addToCart: addToCart,
-                      ),
+          children:
+              items.map((item) {
+                return Card(
+                  elevation: 2,
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: ListTile(
+                    leading:
+                        item["image"] != null
+                            ? Image.asset(
+                              item["image"],
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      Icon(Icons.image_not_supported, size: 50),
+                            )
+                            : Icon(Icons.image_not_supported, size: 50),
+                    title: Text(
+                      item["name"],
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  );
-                },
-              ),
-            );
-          }).toList(),
+                    subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => PizzaDetailsScreen(
+                                name: item["name"],
+                                basePrice: item["price"],
+                                image: item["image"] ?? "",
+                                description: item["description"],
+                                isPizza: title.contains("Pizza"),
+                                addToCart: addToCart,
+                              ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
         ),
         SizedBox(height: 10),
       ],
