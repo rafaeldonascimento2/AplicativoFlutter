@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'orders_screen.dart';
-import 'about_screen.dart';
-import 'login_screen.dart';
-import 'cart_screen.dart';
-import '../widgets/pizza_list_screen.dart';
-import '../widgets/pizza_search_delegate.dart';
-import '../models/order.dart';
-import '../models/pizza.dart';
+import '../order/orders_screen.dart';
+import '../infos/about_screen.dart';
+import '../auth/login_view.dart';
+import '../order/cart_screen.dart';
+import 'pizza_list_screen.dart';
+import 'pizza_search_delegate.dart';
+import '../order/order.dart';
+import 'pizza.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -164,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: () async {
-              await _navigateWithFade(context, LoginScreen());
+              await _navigateWithFade(context, LoginView());
             },
           ),
         ],

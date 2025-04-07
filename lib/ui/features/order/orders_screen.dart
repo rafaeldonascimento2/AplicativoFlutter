@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/order.dart';
+import 'order.dart';
 
 class OrdersScreen extends StatelessWidget {
   final List<Order> orders;

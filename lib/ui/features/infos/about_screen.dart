@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
+import '../menu/home_screen.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});

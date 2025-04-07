@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
-import 'screens/login_screen.dart';
+import 'ui/features/auth/login_view.dart';
 import 'app_theme.dart';
 
 void main() {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+      home: const LoginView(),
     );
   }
 }

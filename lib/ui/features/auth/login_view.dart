@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'register_screen.dart';
-import 'forgot_password_screen.dart';
-import 'home_screen.dart';
+import 'register_view.dart';
+import 'forgot_password_view.dart';
+import '../menu/home_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed:
               () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                MaterialPageRoute(builder: (context) => const RegisterView()),
               ),
           child: const Text('Criar conta'),
         ),
@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
               () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ForgotPasswordScreen(),
+                  builder: (context) => const ForgotPasswordView(),
                 ),
               ),
           child: const Text('Recuperar senha'),

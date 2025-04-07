@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/pizza.dart';
+import 'package:flutter_application_1/ui/features/menu/pizza.dart';
 
 class CartScreen extends StatefulWidget {
   // Tela de carrinho de compras
