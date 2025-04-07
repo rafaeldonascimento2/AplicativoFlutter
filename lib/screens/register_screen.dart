@@ -1,121 +1,281 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'home_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
-  // Tela de cadastro de usuário
+
   @override
-  _RegisterScreenState createState() => _RegisterScreenState(); // Cria o estado da tela de cadastro
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // Estado da tela de cadastro
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+  bool _isLoading = false;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitForm() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    // Simulação de cadastro
+    await Future.delayed(const Duration(seconds: 2));
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cadastro realizado com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
+    setState(() => _isLoading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Constrói a tela de cadastro
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de Usuário'), // Título da tela de cadastro
+        title: const Text('Criar Nova Conta'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            if (Navigator.canPop(context)) {
-              // Verifica se é possível voltar para a tela anterior
-              Navigator.pop(context);
-            }
-          },
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        // Adiciona um preenchimento interno ao conteúdo da tela
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'Nome'),
-                  validator:
-                      (value) => value!.isEmpty ? 'Campo obrigatório' : null,
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildHeader(),
+                    const SizedBox(height: 32),
+                    _buildNameField(),
+                    const SizedBox(height: 16),
+                    _buildEmailField(),
+                    const SizedBox(height: 16),
+                    _buildPhoneField(),
+                    const SizedBox(height: 16),
+                    _buildPasswordField(),
+                    const SizedBox(height: 16),
+                    _buildConfirmPasswordField(),
+                    const SizedBox(height: 24),
+                    _buildRegisterButton(),
+                  ],
                 ),
-                TextFormField(
-                  // Campo de texto para digitar o e-mail
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'E-mail'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      // Verifica se o campo está vazio
-                      return 'Campo obrigatório'; // Mensagem de erro caso o campo esteja vazio
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      // Verifica se o e-mail é válido
-                      return 'Digite um e-mail válido'; // Mensagem de erro caso o e-mail seja inválido
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  // Campo de texto para digitar o telefone
-                  controller: phoneController,
-                  decoration: InputDecoration(labelText: 'Telefone'),
-                  keyboardType:
-                      TextInputType
-                          .phone, // Define o teclado para digitar números de telefone
-                  validator:
-                      (value) => value!.isEmpty ? 'Campo obrigatório' : null,
-                ),
-                TextFormField(
-                  // Campo de texto para digitar a senha
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Senha'),
-                  obscureText: true,
-                  validator:
-                      (value) =>
-                          value != null && value.length < 6
-                              ? 'Mínimo 6 caracteres'
-                              : null,
-                ),
-                TextFormField(
-                  controller: confirmPasswordController,
-                  decoration: InputDecoration(labelText: 'Confirmar Senha'),
-                  obscureText: true,
-                  validator:
-                      (value) =>
-                          value != passwordController.text
-                              ? 'Senhas não coincidem'
-                              : null,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Cadastro realizado com sucesso!'),
-                        ),
-                      );
-                      if (Navigator.canPop(context)) {
-                        Navigator.pop(context);
-                      }
-                    }
-                  },
-                  child: Text('Cadastrar'), // Botão para cadastrar o usuário
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      children: [
+        Icon(Icons.person_add, size: 80, color: Theme.of(context).primaryColor),
+        const SizedBox(height: 16),
+        Text(
+          'Crie sua conta',
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepOrange,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNameField() {
+    return TextFormField(
+      controller: nameController,
+      decoration: const InputDecoration(
+        labelText: 'Nome Completo',
+        prefixIcon: Icon(Icons.person),
+        border: OutlineInputBorder(),
+      ),
+      textCapitalization: TextCapitalization.words,
+      autofillHints: const [AutofillHints.name],
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Digite seu nome completo';
+        if (value.split(' ').length < 2) return 'Digite nome e sobrenome';
+        return null;
+      },
+    );
+  }
+
+  Widget _buildEmailField() {
+    return TextFormField(
+      controller: emailController,
+      decoration: const InputDecoration(
+        labelText: 'E-mail',
+        prefixIcon: Icon(Icons.email),
+        border: OutlineInputBorder(),
+      ),
+      keyboardType: TextInputType.emailAddress,
+      autofillHints: const [AutofillHints.email],
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Digite seu e-mail';
+        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+          return 'E-mail inválido';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPhoneField() {
+    return TextFormField(
+      controller: phoneController,
+      decoration: const InputDecoration(
+        labelText: 'Telefone',
+        prefixIcon: Icon(Icons.phone),
+        border: OutlineInputBorder(),
+      ),
+      keyboardType: TextInputType.phone,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(11),
+        _PhoneInputFormatter(),
+      ],
+      autofillHints: const [AutofillHints.telephoneNumber],
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Digite seu telefone';
+        if (value.length < 11) return 'Número incompleto';
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      controller: passwordController,
+      decoration: InputDecoration(
+        labelText: 'Senha',
+        prefixIcon: const Icon(Icons.lock),
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+          ),
+          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+        ),
+      ),
+      obscureText: _obscurePassword,
+      autofillHints: const [AutofillHints.newPassword],
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Digite uma senha';
+        if (value.length < 6) return 'Mínimo 6 caracteres';
+        if (!RegExp(r'[A-Za-z]').hasMatch(value) ||
+            !RegExp(r'[0-9]').hasMatch(value)) {
+          return 'Use letras e números';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildConfirmPasswordField() {
+    return TextFormField(
+      controller: confirmPasswordController,
+      decoration: InputDecoration(
+        labelText: 'Confirmar Senha',
+        prefixIcon: const Icon(Icons.lock_outline),
+        border: const OutlineInputBorder(),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+          ),
+          onPressed:
+              () => setState(
+                () => _obscureConfirmPassword = !_obscureConfirmPassword,
+              ),
+        ),
+      ),
+      obscureText: _obscureConfirmPassword,
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Confirme sua senha';
+        if (value != passwordController.text) return 'Senhas não coincidem';
+        return null;
+      },
+    );
+  }
+
+  Widget _buildRegisterButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        onPressed: _isLoading ? null : _submitForm,
+        child:
+            _isLoading
+                ? const CircularProgressIndicator()
+                : const Text('CRIAR CONTA', style: TextStyle(fontSize: 16)),
+      ),
+    );
+  }
+}
+
+class _PhoneInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final text = newValue.text.replaceAll(RegExp(r'\D'), '');
+    String formatted = '';
+
+    if (text.length >= 2) {
+      formatted += '(${text.substring(0, 2)}) ';
+      if (text.length > 2) {
+        formatted += text.substring(2, 7);
+        if (text.length > 7) {
+          formatted += '-${text.substring(7, 11)}';
+        }
+      }
+    } else {
+      formatted = text;
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }
