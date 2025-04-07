@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/features/auth/core/controller/register_controller.dart';
 import 'package:flutter_application_1/features/menu/home_screen.dart';
 
 class RegisterView extends StatefulWidget {
@@ -19,6 +20,7 @@ class _RegisterViewState extends State<RegisterView> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
+  final RegisterController _controller = RegisterController();
 
   @override
   void dispose() {
@@ -35,22 +37,38 @@ class _RegisterViewState extends State<RegisterView> {
 
     setState(() => _isLoading = true);
 
-    // Simulação de cadastro
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      await _controller.register(
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        phoneNumber: phoneController.text.replaceAll(RegExp(r'\D'), ''),
+        password: passwordController.text,
+        confirmPassword: confirmPasswordController.text,
+      );
 
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cadastro realizado com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cadastro realizado com sucesso!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
-    setState(() => _isLoading = false);
   }
 
   @override

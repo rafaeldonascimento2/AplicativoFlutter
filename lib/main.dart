@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/di/di.dart';
 import 'package:flutter_application_1/features/auth/ui/login_view.dart';
 import 'app_theme.dart';
 
 void main() {
+  DI.setDependencies();
   runApp(
     DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
   );
