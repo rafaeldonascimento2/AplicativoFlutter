@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../menu/home_screen.dart';
+import 'package:flutter_application_1/features/menu/home_screen.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

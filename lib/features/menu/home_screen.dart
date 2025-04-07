@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../order/orders_screen.dart';
-import '../infos/about_screen.dart';
-import '../auth/login_view.dart';
-import '../order/cart_screen.dart';
-import 'pizza_list_screen.dart';
-import 'pizza_search_delegate.dart';
-import '../order/order.dart';
-import 'pizza.dart';
+import 'package:flutter_application_1/features/auth/ui/login_view.dart';
+import 'package:flutter_application_1/features/infos/about_screen.dart';
+import 'package:flutter_application_1/features/menu/pizza.dart';
+import 'package:flutter_application_1/features/menu/pizza_list_screen.dart';
+import 'package:flutter_application_1/features/menu/pizza_search_delegate.dart';
+import 'package:flutter_application_1/features/order/cart_screen.dart';
+import 'package:flutter_application_1/features/order/order.dart';
+import 'package:flutter_application_1/features/order/orders_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

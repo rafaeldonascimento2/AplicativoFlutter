@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
-import 'ui/features/auth/login_view.dart';
+import 'package:flutter_application_1/features/auth/ui/login_view.dart';
 import 'app_theme.dart';
 
 void main() {

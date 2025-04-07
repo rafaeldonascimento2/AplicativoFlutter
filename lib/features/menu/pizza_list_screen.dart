@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ui/features/menu/pizza_details_screen.dart';
+import 'package:flutter_application_1/features/menu/pizza_details_screen.dart';
 
 class PizzaListScreen extends StatelessWidget {
   final Function(String, double, int, String, String, String) addToCart;
