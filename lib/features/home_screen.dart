@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/auth/ui/login_view.dart';
 import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
+import 'package:flutter_application_1/features/favorites/ui/favorites_screen.dart'; // Importe a tela de favoritos
 import 'package:flutter_application_1/features/infos/about_screen.dart';
 import 'package:flutter_application_1/features/menu/ui/pizza_list_screen.dart';
 import 'package:flutter_application_1/features/menu/ui/pizza_search_delegate.dart';
@@ -26,7 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _updatePages() {
-    _pages = [PizzaListScreen(), const OrdersScreen(), const AboutScreen()];
+    _pages = [
+      PizzaListScreen(),
+      FavoritesScreen(), // Nova aba de favoritos
+      const OrdersScreen(),
+      const AboutScreen(),
+    ];
   }
 
   Future<void> _navigateWithFade(BuildContext context, Widget page) async {
@@ -111,10 +117,18 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
         },
+        type:
+            BottomNavigationBarType
+                .fixed, // Para melhor visualização com mais itens
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.local_pizza),
             label: 'Pizzas',
+          ),
+          BottomNavigationBarItem(
+            // Nova aba de favoritos
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Pedidos'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'Sobre'),

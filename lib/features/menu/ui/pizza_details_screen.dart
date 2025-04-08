@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
+import 'package:flutter_application_1/features/favorites/core/controller/favorites_controller.dart';
+import 'package:flutter_application_1/features/menu/model/pizza.dart';
 
 class PizzaDetailsScreen extends StatefulWidget {
   final String name;
@@ -22,13 +24,14 @@ class PizzaDetailsScreen extends StatefulWidget {
 }
 
 class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
-  //detalhes do item
   int quantity = 1;
   String selectedSize = "Médio";
   String selectedCrust = "Sem borda";
   String observation = "";
   bool observationSent = false;
   late double currentPrice;
+
+  final FavoritesController _favoritesController = FavoritesController();
   final CartController _cartController = CartController();
 
   final Map<String, double> sizePrices = {
@@ -44,11 +47,27 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
     "Chocolate": 5.00,
   };
 
+  Pizza get _currentPizza => Pizza(
+    name: widget.name,
+    price: currentPrice,
+    quantity: quantity,
+    size: widget.isPizza ? selectedSize : "-",
+    crust: widget.isPizza ? selectedCrust : "-",
+    observation: widget.isPizza ? observation : "-",
+  );
+
   @override
   void initState() {
     super.initState();
     currentPrice =
         widget.basePrice + (widget.isPizza ? sizePrices[selectedSize]! : 0.0);
+    _favoritesController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _favoritesController.removeListener(() => setState(() {}));
+    super.dispose();
   }
 
   void _updatePrice() {
@@ -60,35 +79,37 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
     });
   }
 
-  void _sendObservation() {
-    if (observation.trim().isEmpty) {
-      // Exibe um aviso caso a observação esteja vazia
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Por favor, escreva uma observação antes de enviar."),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return; // Para a execução da função
-    }
-
-    setState(() {
-      observationSent = true;
-    });
-
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        observationSent = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.name)),
+      appBar: AppBar(
+        title: Text(widget.name),
+        actions: [
+          IconButton(
+            icon: Icon(
+              _favoritesController.isFavorite(_currentPizza)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: Colors.red,
+            ),
+            onPressed: () {
+              if (_favoritesController.isFavorite(_currentPizza)) {
+                _favoritesController.removeFromFavorites(_currentPizza);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Removido dos favoritos")),
+                );
+              } else {
+                _favoritesController.addToFavorites(_currentPizza);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Adicionado aos favoritos!")),
+                );
+              }
+              setState(() {});
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
-        // 🔹 Permite rolar a tela e evita o overflow
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -214,20 +235,6 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: _sendObservation,
-                      child: Text("Enviar Observação"),
-                    ),
-                    if (observationSent)
-                      Text(
-                        "Observação enviada!",
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                     SizedBox(height: 20),
                   ],
                 ),

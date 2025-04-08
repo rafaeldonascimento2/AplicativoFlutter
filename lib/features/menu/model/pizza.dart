@@ -1,11 +1,13 @@
+import 'package:uuid/uuid.dart';
+
 class Pizza {
-  //tudo da pizza
-  String name;
-  double price;
-  int quantity;
-  String size;
-  String crust;
-  String observation;
+  final String id;
+  final String name;
+  final double price;
+  final int quantity;
+  final String size;
+  final String crust;
+  final String observation;
 
   Pizza({
     required this.name,
@@ -14,10 +16,20 @@ class Pizza {
     required this.size,
     required this.crust,
     required this.observation,
-  });
+  }) : id = _generateId(name, size, crust, observation);
+
+  static String _generateId(
+    String name,
+    String size,
+    String crust,
+    String observation,
+  ) {
+    return '${name}_${size}_${crust}_${observation.hashCode}';
+  }
 
   Map<String, dynamic> toMap() {
     return {
+      "id": id,
       "name": name,
       "price": price,
       "quantity": quantity,
@@ -30,7 +42,7 @@ class Pizza {
   factory Pizza.fromMap(Map<String, dynamic> map) {
     return Pizza(
       name: map["name"],
-      price: map["price"],
+      price: map["price"].toDouble(),
       quantity: map["quantity"],
       size: map["size"],
       crust: map["crust"],
@@ -39,6 +51,7 @@ class Pizza {
   }
 
   Pizza copyWith({
+    String? id,
     String? name,
     double? price,
     int? quantity,
@@ -55,4 +68,12 @@ class Pizza {
       observation: observation ?? this.observation,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Pizza && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
