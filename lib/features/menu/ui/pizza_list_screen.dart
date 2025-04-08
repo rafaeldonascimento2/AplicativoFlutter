@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/menu/ui/pizza_details_screen.dart';
+import 'package:flutter_application_1/features/menu/core/controller/menu_controller.dart'
+    as controller;
+
+class PizzaListScreen extends StatelessWidget {
+  final controller.MenuController menuController = controller.MenuController();
+
+  PizzaListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.all(10),
+      children: [
+        _buildSection(
+          context,
+          "Pizzas Salgadas",
+          menuController.getPizzasSalgadas(),
+        ),
+        _buildSection(context, "Pizzas Doces", menuController.getPizzasDoces()),
+        _buildSection(context, "Bebidas", menuController.getBebidas()),
+        _buildSection(context, "Drinks", menuController.getDrinks()),
+      ],
+    );
+  }
+
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Map<String, dynamic>> items,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Column(
+          children:
+              items.map((item) {
+                return Card(
+                  elevation: 2,
+                  margin: EdgeInsets.symmetric(vertical: 5),
+                  child: ListTile(
+                    leading:
+                        item["image"] != null
+                            ? Image.asset(
+                              item["image"],
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      Icon(Icons.image_not_supported, size: 50),
+                            )
+                            : Icon(Icons.image_not_supported, size: 50),
+                    title: Text(
+                      item["name"],
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => PizzaDetailsScreen(
+                                name: item["name"],
+                                basePrice: item["price"],
+                                image: item["image"] ?? "",
+                                description: item["description"],
+                                isPizza: title.contains("Pizza"),
+                              ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
+        ),
+        SizedBox(height: 10),
+      ],
+    );
+  }
+}

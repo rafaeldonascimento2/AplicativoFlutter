@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/auth/core/controller/login_controller.dart';
-import 'package:flutter_application_1/features/menu/home_screen.dart';
+import 'package:flutter_application_1/features/home_screen.dart';
 import 'register_view.dart';
 import 'forgot_password_view.dart';
 
@@ -114,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
       tag: 'app-logo',
       child: Image.asset(
         'assets/logo.png',
-        height: 180,
+        height: 300,
         errorBuilder:
             (context, error, stackTrace) => const Icon(
               Icons.restaurant_menu,

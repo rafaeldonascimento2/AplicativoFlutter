@@ -1,4 +1,5 @@
-class Pizza { //tudo da pizza
+class Pizza {
+  //tudo da pizza
   String name;
   double price;
   int quantity;
@@ -6,7 +7,7 @@ class Pizza { //tudo da pizza
   String crust;
   String observation;
 
-  Pizza({ 
+  Pizza({
     required this.name,
     required this.price,
     required this.quantity,
@@ -34,6 +35,24 @@ class Pizza { //tudo da pizza
       size: map["size"],
       crust: map["crust"],
       observation: map["observation"],
+    );
+  }
+
+  Pizza copyWith({
+    String? name,
+    double? price,
+    int? quantity,
+    String? size,
+    String? crust,
+    String? observation,
+  }) {
+    return Pizza(
+      name: name ?? this.name,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+      size: size ?? this.size,
+      crust: crust ?? this.crust,
+      observation: observation ?? this.observation,
     );
   }
 }

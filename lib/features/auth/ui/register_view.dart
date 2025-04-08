@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/features/auth/core/controller/register_controller.dart';
-import 'package:flutter_application_1/features/menu/home_screen.dart';
+import 'package:flutter_application_1/features/home_screen.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

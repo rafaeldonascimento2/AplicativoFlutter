@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'order.dart';
+import 'package:flutter_application_1/features/order/core/controllers/order_controller.dart';
 
 class OrdersScreen extends StatelessWidget {
-  final List<Order> orders;
-
-  const OrdersScreen({super.key, required this.orders});
+  const OrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final orderController = OrderController();
+    final orders = orderController.getOrders();
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Pedidos"),
-        backgroundColor: Color.fromARGB(
-          185,
-          232,
-          123,
-          90,
-        ), // Altera a cor do AppBar
+        backgroundColor: Color.fromARGB(185, 232, 123, 90),
       ),
       body:
           orders.isEmpty

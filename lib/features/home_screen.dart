@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/auth/ui/login_view.dart';
+import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
 import 'package:flutter_application_1/features/infos/about_screen.dart';
-import 'package:flutter_application_1/features/menu/pizza.dart';
-import 'package:flutter_application_1/features/menu/pizza_list_screen.dart';
-import 'package:flutter_application_1/features/menu/pizza_search_delegate.dart';
-import 'package:flutter_application_1/features/order/cart_screen.dart';
-import 'package:flutter_application_1/features/order/order.dart';
-import 'package:flutter_application_1/features/order/orders_screen.dart';
+import 'package:flutter_application_1/features/menu/ui/pizza_list_screen.dart';
+import 'package:flutter_application_1/features/menu/ui/pizza_search_delegate.dart';
+import 'package:flutter_application_1/features/cart/ui/cart_screen.dart';
+import 'package:flutter_application_1/features/order/ui/orders_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,9 +16,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  List<Pizza> cart = [];
-  List<Order> orders = [];
   late List<Widget> _pages;
+  final CartController _cartController = CartController();
 
   @override
   void initState() {
@@ -28,70 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _updatePages() {
-    _pages = [
-      PizzaListScreen(addToCart: addToCart),
-      OrdersScreen(orders: orders),
-      AboutScreen(),
-    ];
-  }
-
-  void addToCart(
-    String name,
-    double price,
-    int quantity,
-    String size,
-    String crust,
-    String observation,
-  ) {
-    setState(() {
-      bool exists = false;
-
-      for (var item in cart) {
-        if (item.name == name && item.size == size && item.crust == crust) {
-          item.quantity += quantity;
-          exists = true;
-          break;
-        }
-      }
-
-      if (!exists) {
-        cart.add(
-          Pizza(
-            name: name,
-            price: price,
-            quantity: quantity,
-            size: size,
-            crust: crust,
-            observation:
-                observation.isNotEmpty ? observation : "Sem observação",
-          ),
-        );
-      }
-    });
-  }
-
-  void finalizeOrder() {
-    if (cart.isNotEmpty) {
-      setState(() {
-        orders.insert(
-          0,
-          Order(
-            items: List.from(cart),
-            total: cart.fold(
-              0.0,
-              (sum, item) => sum + (item.price * item.quantity),
-            ),
-            date: DateTime.now().toString(),
-          ),
-        );
-        cart.clear();
-        _updatePages();
-      });
-    }
-  }
-
-  int getCartItemCount() {
-    return cart.fold(0, (sum, item) => sum + item.quantity);
+    _pages = [PizzaListScreen(), const OrdersScreen(), const AboutScreen()];
   }
 
   Future<void> _navigateWithFade(BuildContext context, Widget page) async {
@@ -115,14 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              showSearch(
-                context: context,
-                delegate: PizzaSearchDelegate(
-                  addToCart: (name, price, quantity, size, crust) {
-                    addToCart(name, price, quantity, size, crust, "");
-                  },
-                ),
-              );
+              showSearch(context: context, delegate: PizzaSearchDelegate());
             },
           ),
           Stack(
@@ -132,12 +60,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () async {
                   await _navigateWithFade(
                     context,
-                    CartScreen(cartItems: cart, finalizeOrder: finalizeOrder),
+                    CartScreen(
+                      cartItems: _cartController.cartItems,
+                      finalizeOrder: () {
+                        _cartController.finalizeOrder();
+                        setState(_updatePages);
+                      },
+                    ),
                   );
                   setState(() {});
                 },
               ),
-              if (getCartItemCount() > 0)
+              if (_cartController.itemCount > 0)
                 Positioned(
                   right: 6,
                   top: 6,
@@ -149,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     constraints: BoxConstraints(minWidth: 20, minHeight: 20),
                     child: Text(
-                      getCartItemCount().toString(),
+                      _cartController.itemCount.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,

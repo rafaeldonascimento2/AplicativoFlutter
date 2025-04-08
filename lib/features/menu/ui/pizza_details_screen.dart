@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
 
 class PizzaDetailsScreen extends StatefulWidget {
   final String name;
   final double basePrice;
   final String image;
   final String description;
-  final Function(String, double, int, String, String, String) addToCart;
   final bool isPizza;
 
   const PizzaDetailsScreen({
@@ -14,7 +14,6 @@ class PizzaDetailsScreen extends StatefulWidget {
     required this.basePrice,
     required this.image,
     required this.description,
-    required this.addToCart,
     required this.isPizza,
   });
 
@@ -30,6 +29,7 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
   String observation = "";
   bool observationSent = false;
   late double currentPrice;
+  final CartController _cartController = CartController();
 
   final Map<String, double> sizePrices = {
     "Pequeno": 0.0,
@@ -267,16 +267,15 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
 
               ElevatedButton(
                 onPressed: () {
-                  widget.addToCart(
+                  _cartController.addToCart(
                     widget.name,
                     currentPrice,
                     quantity,
                     widget.isPizza ? selectedSize : "-",
                     widget.isPizza ? selectedCrust : "-",
-                    widget.isPizza
-                        ? observation
-                        : "-", // Adicionando observação ao pedido
+                    widget.isPizza ? observation : "-",
                   );
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("${widget.name} adicionada ao carrinho!"),

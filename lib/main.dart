@@ -7,6 +7,7 @@ import 'app_theme.dart';
 
 void main() {
   DI.setDependencies();
+
   runApp(
     DevicePreview(enabled: !kReleaseMode, builder: (context) => const MyApp()),
   );

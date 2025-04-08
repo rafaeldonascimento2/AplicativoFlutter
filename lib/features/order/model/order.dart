@@ -1,4 +1,4 @@
-import '../menu/pizza.dart';
+import '../../menu/model/pizza.dart';
 
 class Order {
   // Order model

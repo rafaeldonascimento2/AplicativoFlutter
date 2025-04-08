@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'pizza_details_screen.dart';
+class MenuRamMemoryDao {
+  static final MenuRamMemoryDao _instance = MenuRamMemoryDao._internal();
 
-class PizzaSearchDelegate extends SearchDelegate<String> {
-  final Function(String, double, int, String, String) addToCart;
+  factory MenuRamMemoryDao() => _instance;
 
-  PizzaSearchDelegate({required this.addToCart});
+  MenuRamMemoryDao._internal();
 
-  final List<Map<String, dynamic>> menu = [
-    // Pizzas Salgadas
+  final List<Map<String, dynamic>> pizzasSalgadas = [
     {
       "name": "Pizza Margherita",
       "price": 35.00,
@@ -50,8 +48,9 @@ class PizzaSearchDelegate extends SearchDelegate<String> {
       "description": "Calabresa fatiada com cebola e orégano.",
       "category": "Pizzas Salgadas",
     },
+  ];
 
-    // Pizzas Doces
+  final List<Map<String, dynamic>> pizzasDoces = [
     {
       "name": "Pizza de Chocolate",
       "price": 30.00,
@@ -73,20 +72,21 @@ class PizzaSearchDelegate extends SearchDelegate<String> {
       "description": "Cobertura de doce de leite e coco ralado.",
       "category": "Pizzas Doces",
     },
+  ];
 
-    // Bebidas
+  final List<Map<String, dynamic>> bebidas = [
     {
-      "name": "Refrigerante Lata Coca-Cola",
+      "name": "Refrigerante Coca-Cola",
       "price": 5.00,
       "image": "assets/coca.png",
       "description": "Lata de 350ml.",
       "category": "Bebidas",
     },
     {
-      "name": "Suco Natural de Laranja",
+      "name": "Suco de Laranja Natural",
       "price": 7.00,
       "image": "assets/suco_laranja.png",
-      "description": "Suco de laranja natural.",
+      "description": "Suco de laranja puro e refrescante.",
       "category": "Bebidas",
     },
     {
@@ -96,8 +96,9 @@ class PizzaSearchDelegate extends SearchDelegate<String> {
       "description": "Garrafa de 500ml.",
       "category": "Bebidas",
     },
+  ];
 
-    // Drinks
+  final List<Map<String, dynamic>> drinks = [
     {
       "name": "Caipirinha de Limão",
       "price": 15.00,
@@ -121,94 +122,12 @@ class PizzaSearchDelegate extends SearchDelegate<String> {
     },
   ];
 
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
-      ),
-    ];
+  List<Map<String, dynamic>> getAllItems() {
+    return [...pizzasSalgadas, ...pizzasDoces, ...bebidas, ...drinks];
   }
 
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, "");
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return _buildList(context);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return _buildList(context);
-  }
-
-  Widget _buildList(BuildContext context) {
-    final results =
-        menu
-            .where(
-              (item) =>
-                  item["name"].toLowerCase().contains(query.toLowerCase()),
-            )
-            .toList();
-
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        final item = results[index];
-        return ListTile(
-          leading: Image.asset(
-            item["image"],
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-            errorBuilder:
-                (context, error, stackTrace) => Icon(Icons.image_not_supported),
-          ),
-          title: Text(
-            item["name"],
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) => PizzaDetailsScreen(
-                      name: item["name"],
-                      basePrice: item["price"],
-                      image: item["image"],
-                      description: item["description"],
-                      addToCart: (
-                        name,
-                        price,
-                        quantity,
-                        size,
-                        crust,
-                        observation,
-                      ) {
-                        addToCart(name, price, quantity, size, crust);
-                      },
-                      isPizza:
-                          item["category"] == "Pizzas Salgadas" ||
-                          item["category"] == "Pizzas Doces",
-                    ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  List<Map<String, dynamic>> getPizzasSalgadas() => pizzasSalgadas;
+  List<Map<String, dynamic>> getPizzasDoces() => pizzasDoces;
+  List<Map<String, dynamic>> getBebidas() => bebidas;
+  List<Map<String, dynamic>> getDrinks() => drinks;
 }
