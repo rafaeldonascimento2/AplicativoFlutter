@@ -35,6 +35,23 @@ class CartRamMemoryDao {
     }
   }
 
+  void removeItem(String name, String size, String crust) {
+    _cart.removeWhere(
+      (item) => item.name == name && item.size == size && item.crust == crust,
+    );
+  }
+
+  void decreaseQuantityByIndex(int index) {
+    if (index >= 0 && index < _cart.length) {
+      final item = _cart[index];
+      if (item.quantity > 1) {
+        _cart[index] = item.copyWith(quantity: item.quantity - 1);
+      } else {
+        _cart.removeAt(index);
+      }
+    }
+  }
+
   void clearCart() => _cart.clear();
 
   double calculateTotal() =>

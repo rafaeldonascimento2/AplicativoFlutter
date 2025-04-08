@@ -64,16 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               IconButton(
                 icon: Icon(Icons.shopping_cart),
                 onPressed: () async {
-                  await _navigateWithFade(
-                    context,
-                    CartScreen(
-                      cartItems: _cartController.cartItems,
-                      finalizeOrder: () {
-                        _cartController.finalizeOrder();
-                        setState(_updatePages);
-                      },
-                    ),
-                  );
+                  await _navigateWithFade(context, CartScreen());
                   setState(() {});
                 },
               ),
@@ -117,16 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
             _selectedIndex = index;
           });
         },
-        type:
-            BottomNavigationBarType
-                .fixed, // Para melhor visualização com mais itens
+        type: BottomNavigationBarType.fixed,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.local_pizza),
             label: 'Pizzas',
           ),
           BottomNavigationBarItem(
-            // Nova aba de favoritos
             icon: Icon(Icons.favorite),
             label: 'Favoritos',
           ),

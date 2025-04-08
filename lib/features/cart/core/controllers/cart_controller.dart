@@ -21,6 +21,10 @@ class CartController {
     _cartDao.addItem(name, price, quantity, size, crust, observation);
   }
 
+  void decreaseItemQuantityByIndex(int index) {
+    _cartDao.decreaseQuantityByIndex(index);
+  }
+
   void finalizeOrder() {
     if (_cartDao.cart.isNotEmpty) {
       _orderController.addOrder(

@@ -1,51 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
 import 'package:flutter_application_1/features/menu/model/pizza.dart';
 
 class CartScreen extends StatefulWidget {
-  // Tela de carrinho de compras
-  final List<Pizza> cartItems; // Lista de pizzas no carrinho
-  final VoidCallback finalizeOrder; // Função para finalizar o pedido
-
-  const CartScreen({
-    super.key,
-    required this.cartItems,
-    required this.finalizeOrder,
-  });
+  final CartController _cartController = CartController();
 
   @override
-  _CartScreenState createState() => _CartScreenState(); // Retorna o estado da tela
+  _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
   void _removeFromCart(int index) {
-    setState(() {
-      if (widget.cartItems[index].quantity > 1) {
-        widget.cartItems[index] = Pizza(
-          name: widget.cartItems[index].name,
-          price: widget.cartItems[index].price,
-          quantity: widget.cartItems[index].quantity - 1,
-          size: widget.cartItems[index].size,
-          crust: widget.cartItems[index].crust,
-          observation: widget.cartItems[index].observation,
-        );
-      } else {
-        widget.cartItems.removeAt(index);
-      }
-    });
+    widget._cartController.decreaseItemQuantityByIndex(index);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    double total = widget.cartItems.fold(
+    double total = widget._cartController.cartItems.fold(
       0,
       (sum, item) => sum + (item.price * item.quantity),
     );
 
     return Scaffold(
-      // Retorna a tela de carrinho de compras
       appBar: AppBar(title: Text('Carrinho de Compras')),
       body:
-          widget.cartItems.isEmpty
+          widget._cartController.cartItems.isEmpty
               ? Center(
                 child: Text(
                   "Seu carrinho está vazio 🛒",
@@ -62,9 +42,9 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: widget.cartItems.length,
+                        itemCount: widget._cartController.cartItems.length,
                         itemBuilder: (context, index) {
-                          final item = widget.cartItems[index];
+                          final item = widget._cartController.cartItems[index];
                           return Card(
                             margin: EdgeInsets.symmetric(vertical: 5),
                             child: ListTile(
@@ -88,7 +68,6 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     Text(
-                      // Exibe o total do carrinho
                       "Total: R\$ ${total.toStringAsFixed(2)}",
                       style: TextStyle(
                         fontSize: 18,
@@ -97,12 +76,11 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      // Botão para finalizar o pedido
                       onPressed:
-                          widget.cartItems.isEmpty
+                          widget._cartController.cartItems.isEmpty
                               ? null
                               : () {
-                                widget.finalizeOrder();
+                                widget._cartController.finalizeOrder();
                                 Navigator.pop(context);
                               },
                       style: ElevatedButton.styleFrom(
