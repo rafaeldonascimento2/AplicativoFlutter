@@ -16,9 +16,9 @@ class Pizza {
     required this.size,
     required this.crust,
     required this.observation,
-  }) : id = _generateId(name, size, crust, observation);
+  }) : id = generateId(name, size, crust, observation);
 
-  static String _generateId(
+  static String generateId(
     String name,
     String size,
     String crust,

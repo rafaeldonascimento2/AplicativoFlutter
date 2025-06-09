@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/di/di.dart';
-import 'package:flutter_application_1/features/favorites/core/dao/favorites_ram_memory_dao.dart';
+import 'package:flutter_application_1/features/favorites/core/dao/favorites_firebase_dao.dart';
 import 'package:flutter_application_1/features/menu/model/pizza.dart';
 
 class FavoritesController extends ValueNotifier<List<Pizza>> {
-  FavoritesController() : super([]) {
+  final FavoritesFirestoreDao _dao;
+
+  FavoritesController({required String userId})
+      : _dao = FavoritesFirestoreDao(userId: userId),
+        super([]) {
     _loadFavorites();
   }
 
-  final FavoritesRamMemoryDao _dao = DI.getIt.get<FavoritesRamMemoryDao>();
-
-  void _loadFavorites() {
-    value = _dao.favorites;
+  Future<void> _loadFavorites() async {
+    final favoritesList = await _dao.getFavorites();
+    value = favoritesList;
+    notifyListeners();
   }
 
-  void addToFavorites(Pizza pizza) {
-    _dao.addFavorite(pizza);
-    _loadFavorites();
+  Future<void> addToFavorites(Pizza pizza) async {
+    await _dao.addFavorite(pizza);
+    await _loadFavorites();
   }
 
-  void removeFromFavorites(Pizza pizza) {
-    _dao.removeFavorite(pizza);
-    _loadFavorites();
+  Future<void> removeFromFavorites(Pizza pizza) async {
+    await _dao.removeFavorite(pizza);
+    await _loadFavorites();
   }
 
   bool isFavorite(Pizza pizza) {

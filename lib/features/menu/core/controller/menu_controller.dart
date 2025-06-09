@@ -1,13 +1,12 @@
 import 'package:flutter_application_1/di/di.dart';
-import 'package:flutter_application_1/features/menu/core/dao/menu_ram_memory_dao.dart';
+import 'package:flutter_application_1/features/menu/core/dao/menu_firebase_dao.dart';
 
 class MenuController {
-  final MenuRamMemoryDao _menuDao = DI.getIt.get<MenuRamMemoryDao>();
+  final MenuFirestoreDao _menuDao = DI.getIt.get<MenuFirestoreDao>();
 
-  List<Map<String, dynamic>> getPizzasSalgadas() =>
-      _menuDao.getPizzasSalgadas();
-  List<Map<String, dynamic>> getPizzasDoces() => _menuDao.getPizzasDoces();
-  List<Map<String, dynamic>> getBebidas() => _menuDao.getBebidas();
-  List<Map<String, dynamic>> getDrinks() => _menuDao.getDrinks();
-  List<Map<String, dynamic>> getAllItems() => _menuDao.getAllItems();
+  Future<List<Map<String, dynamic>>> getPizzasSalgadas() => _menuDao.getPizzasSalgadas();
+  Future<List<Map<String, dynamic>>> getPizzasDoces() => _menuDao.getPizzasDoces();
+  Future<List<Map<String, dynamic>>> getBebidas() => _menuDao.getBebidas();
+  Future<List<Map<String, dynamic>>> getDrinks() => _menuDao.getDrinks();
+  Future<List<Map<String, dynamic>>> getAllItems() => _menuDao.getAllItems();
 }

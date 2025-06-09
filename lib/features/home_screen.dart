@@ -59,38 +59,49 @@ class _HomeScreenState extends State<HomeScreen> {
               showSearch(context: context, delegate: PizzaSearchDelegate());
             },
           ),
-          Stack(
-            children: [
-              IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () async {
-                  await _navigateWithFade(context, CartScreen());
-                  setState(() {});
-                },
-              ),
-              if (_cartController.itemCount > 0)
-                Positioned(
-                  right: 6,
-                  top: 6,
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: BoxConstraints(minWidth: 20, minHeight: 20),
-                    child: Text(
-                      _cartController.itemCount.toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+          FutureBuilder<int>(
+            future: _cartController.itemCount,
+            builder: (context, snapshot) {
+              int count = snapshot.data ?? 0;
+              return Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () async {
+                      await _navigateWithFade(context, CartScreen());
+                      setState(
+                        () {},
+                      ); // atualiza depois de voltar da tela do carrinho
+                    },
                   ),
-                ),
-            ],
+                  if (count > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 20,
+                          minHeight: 20,
+                        ),
+                        child: Text(
+                          count.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
           IconButton(
             icon: Icon(Icons.exit_to_app),

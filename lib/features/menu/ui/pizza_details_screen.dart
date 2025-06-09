@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/cart/core/controllers/cart_controller.dart';
 import 'package:flutter_application_1/features/favorites/core/controller/favorites_controller.dart';
@@ -31,7 +32,7 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
   bool observationSent = false;
   late double currentPrice;
 
-  final FavoritesController _favoritesController = FavoritesController();
+  FavoritesController? _favoritesController;
   final CartController _cartController = CartController();
 
   final Map<String, double> sizePrices = {
@@ -61,12 +62,21 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
     super.initState();
     currentPrice =
         widget.basePrice + (widget.isPizza ? sizePrices[selectedSize]! : 0.0);
-    _favoritesController.addListener(() => setState(() {}));
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _favoritesController = FavoritesController(userId: user.uid);
+      _favoritesController!.addListener(_updateFavoritesState);
+    }
+  }
+
+  void _updateFavoritesState() {
+    setState(() {});
   }
 
   @override
   void dispose() {
-    _favoritesController.removeListener(() => setState(() {}));
+    _favoritesController?.removeListener(_updateFavoritesState);
     super.dispose();
   }
 
@@ -87,23 +97,37 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              _favoritesController.isFavorite(_currentPizza)
+              (_favoritesController?.isFavorite(_currentPizza) ?? false)
                   ? Icons.favorite
                   : Icons.favorite_border,
               color: Colors.red,
             ),
-            onPressed: () {
-              if (_favoritesController.isFavorite(_currentPizza)) {
-                _favoritesController.removeFromFavorites(_currentPizza);
+            onPressed: () async {
+              if (_favoritesController == null) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Removido dos favoritos")),
+                  const SnackBar(
+                    content: Text("Faça login para usar favoritos"),
+                  ),
+                );
+                return;
+              }
+
+              final isFav = _favoritesController!.isFavorite(_currentPizza);
+
+              if (isFav) {
+                await _favoritesController!.removeFromFavorites(_currentPizza);
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Removido dos favoritos")),
                 );
               } else {
-                _favoritesController.addToFavorites(_currentPizza);
+                await _favoritesController!.addToFavorites(_currentPizza);
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Adicionado aos favoritos!")),
+                  const SnackBar(content: Text("Adicionado aos favoritos!")),
                 );
               }
+
               setState(() {});
             },
           ),
@@ -273,8 +297,8 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
               SizedBox(height: 20),
 
               ElevatedButton(
-                onPressed: () {
-                  _cartController.addToCart(
+                onPressed: () async {
+                  await _cartController.addToCart(
                     widget.name,
                     currentPrice,
                     quantity,
@@ -282,6 +306,8 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
                     widget.isPizza ? selectedCrust : "-",
                     widget.isPizza ? observation : "-",
                   );
+
+                  if (!mounted) return;
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

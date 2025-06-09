@@ -34,42 +34,55 @@ class PizzaSearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) => _buildList(context);
 
   Widget _buildList(BuildContext context) {
-    final results = itemController.searchItems(query);
-
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        final item = results[index];
-        return ListTile(
-          leading: Image.asset(
-            item["image"],
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-            errorBuilder:
-                (context, error, stackTrace) => Icon(Icons.image_not_supported),
-          ),
-          title: Text(
-            item["name"],
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:
-                    (context) => PizzaDetailsScreen(
-                      name: item["name"],
-                      basePrice: item["price"],
-                      image: item["image"],
-                      description: item["description"],
-                      isPizza: item["category"].contains("Pizza"),
+    return FutureBuilder<List<Map<String, dynamic>>>(
+      future: itemController.searchItems(query),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Erro ao carregar itens'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text('Nenhum item encontrado'));
+        } else {
+          final results = snapshot.data!;
+          return ListView.builder(
+            itemCount: results.length,
+            itemBuilder: (context, index) {
+              final item = results[index];
+              return ListTile(
+                leading: Image.asset(
+                  item["image"],
+                  width: 50,
+                  height: 50,
+                  fit: BoxFit.cover,
+                  errorBuilder:
+                      (context, error, stackTrace) =>
+                          Icon(Icons.image_not_supported),
+                ),
+                title: Text(
+                  item["name"],
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text("R\$ ${item["price"].toStringAsFixed(2)}"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => PizzaDetailsScreen(
+                            name: item["name"],
+                            basePrice: item["price"],
+                            image: item["image"],
+                            description: item["description"],
+                            isPizza: item["category"].contains("Pizza"),
+                          ),
                     ),
-              ),
-            );
-          },
-        );
+                  );
+                },
+              );
+            },
+          );
+        }
       },
     );
   }

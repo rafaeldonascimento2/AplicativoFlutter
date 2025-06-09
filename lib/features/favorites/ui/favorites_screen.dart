@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/features/favorites/core/controller/favorites_controller.dart';
 import 'package:flutter_application_1/features/menu/model/pizza.dart';
@@ -8,17 +9,39 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  final FavoritesController _controller = FavoritesController();
+  FavoritesController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _controller = FavoritesController(userId: user.uid);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_controller == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Favoritos"),
+          backgroundColor: const Color.fromARGB(185, 232, 123, 90),
+        ),
+        body: const Center(
+          child: Text("Usuário não autenticado."),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Favoritos"),
         backgroundColor: const Color.fromARGB(185, 232, 123, 90),
       ),
       body: ValueListenableBuilder<List<Pizza>>(
-        valueListenable: _controller,
+        valueListenable: _controller!,
         builder: (context, favorites, _) {
           if (favorites.isEmpty) {
             return const Center(
@@ -61,8 +84,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         alignment: Alignment.centerRight,
                         child: IconButton(
                           icon: const Icon(Icons.favorite, color: Colors.red),
-                          onPressed:
-                              () => _controller.removeFromFavorites(pizza),
+                          onPressed: () async {
+                            await _controller!.removeFromFavorites(pizza);
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Removido dos favoritos')),
+                            );
+                          },
                         ),
                       ),
                     ],

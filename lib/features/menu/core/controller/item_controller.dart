@@ -1,11 +1,12 @@
 import 'package:flutter_application_1/di/di.dart';
-import 'package:flutter_application_1/features/menu/core/dao/menu_ram_memory_dao.dart';
+import 'package:flutter_application_1/features/menu/core/dao/menu_firebase_dao.dart';
 
 class ItemController {
-  final MenuRamMemoryDao _menuDao = DI.getIt.get<MenuRamMemoryDao>();
+  final MenuFirestoreDao _menuDao = DI.getIt.get<MenuFirestoreDao>();
 
-  List<Map<String, dynamic>> searchItems(String query) {
-    return _menuDao.getAllItems().where((item) {
+  Future<List<Map<String, dynamic>>> searchItems(String query) async {
+    var itens = await _menuDao.getAllItems();  // espera o Future ser resolvido
+    return itens.where((item) {
       return item["name"].toLowerCase().contains(query.toLowerCase());
     }).toList();
   }
