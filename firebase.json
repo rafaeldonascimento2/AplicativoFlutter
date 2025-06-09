@@ -1,1 +1,45 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"pizzaria-df5bb","appId":"1:41102898805:android:fa6b2db32b9dee53662a3c","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"pizzaria-df5bb","configurations":{"android":"1:41102898805:android:fa6b2db32b9dee53662a3c","ios":"1:41102898805:ios:98e89dbea183df7e662a3c","web":"1:41102898805:web:1d77a2da7db9df41662a3c"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pizzaria-df5bb",
+          "appId": "1:41102898805:android:fa6b2db32b9dee53662a3c",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pizzaria-df5bb",
+          "configurations": {
+            "android": "1:41102898805:android:fa6b2db32b9dee53662a3c",
+            "ios": "1:41102898805:ios:98e89dbea183df7e662a3c",
+            "web": "1:41102898805:web:1d77a2da7db9df41662a3c"
+          }
+        }
+      }
+    }
+  },
+  "apphosting": {
+    "backendId": "pizzaria",
+    "rootDir": "/",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "functions"
+    ]
+  },
+  "hosting": {
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "us-central1"
+    }
+  }
+}
