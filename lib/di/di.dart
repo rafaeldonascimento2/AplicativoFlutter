@@ -15,10 +15,17 @@ abstract class DI {
     // getIt.registerLazySingleton(() => CartRamMemoryDao());
     // getIt.registerLazySingleton(() => FavoritesRamMemoryDao());
 
-    getIt.registerLazySingleton(() => FirebaseUserDao());
-    getIt.registerLazySingleton(() => MenuFirestoreDao());
-    getIt.registerLazySingleton(() => OrderFirestoreDao());
-    getIt.registerLazySingleton(() => CartFirestoreDao());
+    getIt.registerFactory(() => FirebaseUserDao());
+    getIt.registerFactory(() => MenuFirestoreDao());
+
+    getIt.registerFactoryParam<OrderFirestoreDao, String, void>(
+      (userId, _) => OrderFirestoreDao(userId: userId),
+    );
+
+    getIt.registerFactoryParam<CartFirestoreDao, String, void>(
+      (userId, _) => CartFirestoreDao(userId: userId),
+    );
+
     getIt.registerFactoryParam<FavoritesFirestoreDao, String, void>(
       (userId, _) => FavoritesFirestoreDao(userId: userId),
     );

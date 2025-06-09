@@ -3,20 +3,23 @@ import 'package:flutter_application_1/features/order/model/order.dart';
 
 class OrderFirestoreDao {
   final fb.FirebaseFirestore _firestore = fb.FirebaseFirestore.instance;
-  final String _collection = 'orders';
+  final String userId;
+
+  OrderFirestoreDao({required this.userId});
+
+  fb.CollectionReference get _ordersCollection =>
+      _firestore.collection('users').doc(userId).collection('orders');
 
   Future<List<Order>> getOrders() async {
-    final snapshot = await _firestore
-        .collection(_collection)
-        .orderBy('date', descending: true)
-        .get();
+    final snapshot =
+        await _ordersCollection.orderBy('date', descending: true).get();
 
     return snapshot.docs.map((doc) {
-      return Order.fromMap(doc.data());
+      return Order.fromMap(doc.data() as Map<String, dynamic>);
     }).toList();
   }
 
   Future<void> addOrder(Order order) async {
-    await _firestore.collection(_collection).add(order.toMap());
+    await _ordersCollection.add(order.toMap());
   }
 }

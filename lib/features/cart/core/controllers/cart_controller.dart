@@ -1,12 +1,20 @@
-import 'package:flutter_application_1/di/di.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/features/cart/core/dao/cart_firebase_dao.dart';
 import 'package:flutter_application_1/features/menu/model/pizza.dart';
 import 'package:flutter_application_1/features/order/core/controllers/order_controller.dart';
 import 'package:flutter_application_1/features/order/model/order.dart';
 
 class CartController {
-  final CartFirestoreDao _cartDao = DI.getIt.get<CartFirestoreDao>();
+  late final CartFirestoreDao _cartDao;
   final OrderController _orderController = OrderController();
+
+  CartController() {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) {
+      throw Exception('Usuário não autenticado');
+    }
+    _cartDao = CartFirestoreDao(userId: userId);
+  }
 
   Future<List<Pizza>> get cartItems async => await _cartDao.getCart();
 
@@ -26,7 +34,12 @@ class CartController {
     if (index < 0 || index >= items.length) return;
 
     final pizza = items[index];
-    final id = Pizza.generateId(pizza.name, pizza.size, pizza.crust, pizza.observation);
+    final id = Pizza.generateId(
+      pizza.name,
+      pizza.size,
+      pizza.crust,
+      pizza.observation,
+    );
     await _cartDao.decreaseQuantityById(id);
   }
 

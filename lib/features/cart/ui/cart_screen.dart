@@ -48,13 +48,20 @@ class _CartScreenState extends State<CartScreen> {
             return Center(
               child: Text(
                 "Seu carrinho está vazio 🛒",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
               ),
             );
           }
 
           final cartItems = snapshot.data!;
-          double total = cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+          double total = cartItems.fold(
+            0,
+            (sum, item) => sum + (item.price * item.quantity),
+          );
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -73,7 +80,9 @@ class _CartScreenState extends State<CartScreen> {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text("R\$ ${(item.price * item.quantity).toStringAsFixed(2)}"),
+                              Text(
+                                "R\$ ${(item.price * item.quantity).toStringAsFixed(2)}",
+                              ),
                               IconButton(
                                 icon: Icon(Icons.delete, color: Colors.red),
                                 onPressed: () => _removeFromCart(index),

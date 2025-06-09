@@ -174,11 +174,12 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
                     DropdownButton<String>(
                       value: selectedSize,
                       items:
-                          sizePrices.keys.map((size) {
+                          sizePrices.entries.map((entry) {
+                            final price = entry.value;
                             return DropdownMenuItem<String>(
-                              value: size,
+                              value: entry.key,
                               child: Text(
-                                "$size (+R\$ ${sizePrices[size]!.toStringAsFixed(2)})",
+                                "${entry.key} (+R\$ ${(price ?? 0.0).toStringAsFixed(2)})",
                               ),
                             );
                           }).toList(),
@@ -196,7 +197,7 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
                 ),
 
               Text(
-                "Preço unitário: R\$ ${currentPrice.toStringAsFixed(2)}",
+                "Preço unitário: R\$ ${(currentPrice ?? 0.0).toStringAsFixed(2)}",
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 20),
@@ -214,11 +215,12 @@ class _PizzaDetailsScreenState extends State<PizzaDetailsScreen> {
                     DropdownButton<String>(
                       value: selectedCrust,
                       items:
-                          crustPrices.keys.map((crust) {
+                          crustPrices.entries.map((entry) {
+                            final price = entry.value;
                             return DropdownMenuItem<String>(
-                              value: crust,
+                              value: entry.key,
                               child: Text(
-                                "$crust (+R\$ ${crustPrices[crust]!.toStringAsFixed(2)})",
+                                "${entry.key} (+R\$ ${(price ?? 0.0).toStringAsFixed(2)})",
                               ),
                             );
                           }).toList(),

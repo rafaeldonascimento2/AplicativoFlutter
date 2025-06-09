@@ -1,13 +1,21 @@
-import 'package:flutter_application_1/di/di.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/features/order/core/dao/order_firebase_dao.dart';
 import 'package:flutter_application_1/features/order/model/order.dart';
 
 class OrderController {
-  final OrderFirestoreDao _orderDao = DI.getIt.get<OrderFirestoreDao>();
+  late final OrderFirestoreDao _orderDao;
+
+  OrderController() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('Usuário não autenticado');
+    }
+    _orderDao = OrderFirestoreDao(userId: user.uid);
+  }
 
   Future<List<Order>> getOrders() => _orderDao.getOrders();
 
-  void addOrder(Order order) {
-    _orderDao.addOrder(order);
+  Future<void> addOrder(Order order) async {
+    await _orderDao.addOrder(order);
   }
 }
