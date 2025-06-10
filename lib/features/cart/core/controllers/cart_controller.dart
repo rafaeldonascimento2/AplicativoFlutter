@@ -34,12 +34,18 @@ class CartController {
     if (index < 0 || index >= items.length) return;
 
     final pizza = items[index];
+    final normalizedObservation =
+        pizza.observation.trim().isEmpty
+            ? "Sem observação"
+            : pizza.observation.trim();
+
     final id = Pizza.generateId(
       pizza.name,
       pizza.size,
       pizza.crust,
-      pizza.observation,
+      normalizedObservation,
     );
+
     await _cartDao.decreaseQuantityById(id);
   }
 

@@ -10,7 +10,6 @@ class CartFirestoreDao {
   CollectionReference get _cartCollection =>
       _firestore.collection('users').doc(userId).collection('cart');
 
-  /// Busca todos os itens do carrinho
   Future<List<Pizza>> getCart() async {
     final snapshot = await _cartCollection.get();
     return snapshot.docs
@@ -18,7 +17,6 @@ class CartFirestoreDao {
         .toList();
   }
 
-  /// Adiciona item ao carrinho ou atualiza a quantidade se já existir
   Future<void> addItem(
     String name,
     double price,
@@ -35,9 +33,6 @@ class CartFirestoreDao {
     final doc = await docRef.get();
     if (doc.exists) {
       final existing = Pizza.fromMap(doc.data() as Map<String, dynamic>);
-      print(
-        'Atualizando quantidade de ${existing.name} para ${existing.quantity + quantity}',
-      );
       await docRef.update({"quantity": existing.quantity + quantity});
     } else {
       final pizza = Pizza(
@@ -48,34 +43,10 @@ class CartFirestoreDao {
         crust: crust,
         observation: normalizedObservation,
       );
-      print('Adicionando novo item ao carrinho: ${pizza.name}');
       await docRef.set(pizza.toMap());
     }
   }
 
-  /// Remove o item do carrinho baseado nas características
-  Future<void> removeItem(
-    String name,
-    String size,
-    String crust,
-    String observation,
-  ) async {
-    final normalizedObservation =
-        observation.trim().isEmpty ? "Sem observação" : observation.trim();
-    final id = Pizza.generateId(name, size, crust, normalizedObservation);
-    final docRef = _cartCollection.doc(id);
-
-    print('Tentando remover item com id: $id');
-    final doc = await docRef.get();
-    if (doc.exists) {
-      await docRef.delete();
-      print('Item removido com sucesso!');
-    } else {
-      print('Item com id $id não encontrado para remoção.');
-    }
-  }
-
-  /// Diminui a quantidade de um item, ou remove se for 1
   Future<void> decreaseQuantityById(String id) async {
     final docRef = _cartCollection.doc(id);
     final doc = await docRef.get();
@@ -98,7 +69,6 @@ class CartFirestoreDao {
     }
   }
 
-  /// Remove todos os itens do carrinho
   Future<void> clearCart() async {
     final snapshot = await _cartCollection.get();
     for (var doc in snapshot.docs) {
@@ -107,7 +77,6 @@ class CartFirestoreDao {
     }
   }
 
-  /// Calcula o total atual do carrinho
   Future<double> calculateTotal() async {
     final items = await getCart();
     return items.fold<double>(
@@ -116,7 +85,6 @@ class CartFirestoreDao {
     );
   }
 
-  /// Retorna a quantidade total de itens no carrinho
   Future<int> getItemCount() async {
     final items = await getCart();
     return items.fold<int>(0, (sum, item) => sum + item.quantity);
